@@ -1,6 +1,7 @@
 package ru.rybkin.web.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -35,26 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/news_category/**").hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
-                .and()
-                .httpBasic();
+                .and().httpBasic()
+                .and().sessionManagement().disable();
     }
-
-   /* @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles(Role.ADMIN.name())
-                .build(),
-                User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("user"))
-                .roles(Role.USER.name())
-                .build()
-        );
-    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -63,6 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     protected PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder(12);
     }
 }

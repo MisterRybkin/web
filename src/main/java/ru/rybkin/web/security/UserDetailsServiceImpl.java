@@ -1,12 +1,13 @@
 package ru.rybkin.web.security;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.rybkin.web.user.models.Role;
-import ru.rybkin.web.user.models.User;
+import ru.rybkin.web.user.models.NewsUser;
 import ru.rybkin.web.user.repositories.UserRepository;
 
 import java.util.Collections;
@@ -23,12 +24,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(login).orElseThrow(() ->
+        NewsUser newsUser = userRepository.findByLogin(login).orElseThrow(() ->
                 new UsernameNotFoundException("Пользователь не найден"));
-        Role role = user.getRole();
+        Role role = newsUser.getRole();
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority(role.getName())
         );
-        return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(), authorities);
+        return new User(newsUser.getLogin(), newsUser.getPassword(), authorities);
     }
 }

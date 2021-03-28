@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.rybkin.web.user.models.User;
+import ru.rybkin.web.user.models.NewsUser;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -60,15 +60,15 @@ public class SecurityUser implements UserDetails {
         return isActive;
     }
 
-    public static UserDetails fromUser(User user) {
+    public static UserDetails fromUser(NewsUser newsUser) {
         return new org.springframework.security.core.userdetails.User(
-                user.getLogin(),
-                user.getPassword(),
-                user.getUserStatus().getName().equals("ACTIVE"),
-                user.getUserStatus().getName().equals("ACTIVE"),
-                user.getUserStatus().getName().equals("ACTIVE"),
-                user.getUserStatus().getName().equals("ACTIVE"),
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()))
+                newsUser.getLogin(),
+                newsUser.getPassword(),
+                newsUser.getUserStatus().getName().equals("ACTIVE"),
+                newsUser.getUserStatus().getName().equals("ACTIVE"),
+                newsUser.getUserStatus().getName().equals("ACTIVE"),
+                newsUser.getUserStatus().getName().equals("ACTIVE"),
+                Collections.singletonList(new SimpleGrantedAuthority(newsUser.getRole().getName()))
         );
     }
 }
