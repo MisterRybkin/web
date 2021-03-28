@@ -10,8 +10,6 @@ import ru.rybkin.web.repositories.NewsRepository;
 import ru.rybkin.web.services.NewsService;
 import ru.rybkin.web.transfer.NewsCategoryDTO;
 import ru.rybkin.web.transfer.NewsDTO;
-import ru.rybkin.web.utils.NewsCategoryUtils;
-import ru.rybkin.web.utils.NewsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +30,7 @@ public class NewsServiceImpl implements NewsService {
         List<News> newsList = newsRepository.findAll(); //фильтр новостей по категориям сделать
 
         if (newsList.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             List<NewsDTO> newsDTOList = new ArrayList<>();
             for (News news: newsList
@@ -44,15 +42,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public ResponseEntity<List<NewsDTO>> getAllNewsOneCategory(String id) {
-        Long idL;
-        try {
-            idL = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        List<News> newsList = newsRepository.findAllByNewsCategory_Id(idL);
+    public ResponseEntity<List<NewsDTO>> getAllNewsOneCategory(Long id) {
+        List<News> newsList = newsRepository.findAllByNewsCategory_Id(id);
 
         if (newsList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -72,15 +63,15 @@ public class NewsServiceImpl implements NewsService {
         if (newsRepository.existsById(id)) {
             news = newsRepository.getOne(id);
         } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(new NewsDTO(news));
     }
 
     @Override
-    public ResponseEntity uploadNews(NewsDTO newsDTO) {
+    public ResponseEntity<String> uploadNews(NewsDTO newsDTO) {
         NewsCategoryDTO newsCategoryDTO = newsDTO.getCategory();
-        News news = NewsUtils.toNews(newsDTO);
+        News news = newsDTO.toNews();
 
         if (news.getName() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -107,12 +98,12 @@ public class NewsServiceImpl implements NewsService {
             }
 
             NewsCategory newsCategory = newsCategoryRepository
-                    .saveAndFlush(NewsCategoryUtils.toNewsCategory(newsCategoryDTO));
+                    .saveAndFlush(newsCategoryDTO.toNewsCategory());
             news.setNewsCategory(newsCategory);
         }
 
         newsRepository.saveAndFlush(news);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
@@ -121,7 +112,7 @@ public class NewsServiceImpl implements NewsService {
         if (newsRepository.existsById(id)) {
             news = newsRepository.getOne(id);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body("Не удалось найти нужную новость!");
         }
 
@@ -155,24 +146,24 @@ public class NewsServiceImpl implements NewsService {
                 }
 
                 NewsCategory newsCategory = newsCategoryRepository
-                        .saveAndFlush(NewsCategoryUtils.toNewsCategory(newsCategoryDTO));
+                        .saveAndFlush(newsCategoryDTO.toNewsCategory());
                 news.setNewsCategory(newsCategory);
             }
 
-            news.setNewsCategory(NewsCategoryUtils.toNewsCategory(newsDTO.getCategory()));
+            news.setNewsCategory(newsCategoryDTO.toNewsCategory());
         }
 
         newsRepository.saveAndFlush(news);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> deleteNews(Long id) {
         if (newsRepository.existsById(id)) {
             newsRepository.deleteById(id);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body("Не удалось найти нужную новость!");
         }
     }

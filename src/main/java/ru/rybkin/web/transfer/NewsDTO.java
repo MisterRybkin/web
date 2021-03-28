@@ -20,4 +20,13 @@ public class NewsDTO {
         this.fullDescription = news.getFullDescription();
         this.category = new NewsCategoryDTO(news.getNewsCategory());
     }
+
+    public News toNews() {
+        News news = new News();
+        news.setId(id);
+        news.setName(name);
+        news.setShortDescription(shortDescription);
+        news.setFullDescription(fullDescription);
+        return news;
+    }
 }

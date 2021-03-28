@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NewsService {
     ResponseEntity<List<NewsDTO>> getAllNews();
-    ResponseEntity<List<NewsDTO>> getAllNewsOneCategory(String id);
+    ResponseEntity<List<NewsDTO>> getAllNewsOneCategory(Long id);
     ResponseEntity<NewsDTO> getNews(Long id);
     ResponseEntity<String> uploadNews(NewsDTO newsDTO);
     ResponseEntity<String> updateNews(NewsDTO newsDTO,Long id);

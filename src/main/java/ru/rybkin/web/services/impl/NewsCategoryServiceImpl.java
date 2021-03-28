@@ -7,7 +7,6 @@ import ru.rybkin.web.models.NewsCategory;
 import ru.rybkin.web.repositories.NewsCategoryRepository;
 import ru.rybkin.web.services.NewsCategoryService;
 import ru.rybkin.web.transfer.NewsCategoryDTO;
-import ru.rybkin.web.utils.NewsCategoryUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
         List<NewsCategory> newsList = repository.findAll();
 
         if (newsList.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             List<NewsCategoryDTO> newsCategoryDTOList = new ArrayList<>();
             for (NewsCategory newsCategory : newsList) {
@@ -42,7 +41,7 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
         if (repository.existsById(id)) {
             newsCategory = repository.getOne(id);
         } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(new NewsCategoryDTO(newsCategory));
     }
@@ -57,8 +56,8 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Попытка добавить категорию с пустым названием!");
             }
-            repository.saveAndFlush(NewsCategoryUtils.toNewsCategory(newsCategoryDTO));
-            return new ResponseEntity(HttpStatus.OK);
+            repository.saveAndFlush(newsCategoryDTO.toNewsCategory());
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
@@ -68,7 +67,7 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
         if (repository.existsById(id)) {
             newsCategory = repository.getOne(id);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body("Не удалось найти нужную категорию!");
         }
 
@@ -91,16 +90,16 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
         }
 
         repository.saveAndFlush(newsCategory);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> deleteNewsCategory(Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body("Не удалось найти нужную категорию!");
         }
     }

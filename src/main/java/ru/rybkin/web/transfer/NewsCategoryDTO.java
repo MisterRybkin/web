@@ -16,4 +16,12 @@ public class NewsCategoryDTO {
         this.name = newsCategory.getName();
         this.color = newsCategory.getColor();
     }
+
+    public NewsCategory toNewsCategory() {
+        NewsCategory newsCategory = new NewsCategory();
+        newsCategory.setId(id);
+        newsCategory.setName(name);
+        newsCategory.setColor(color);
+        return newsCategory;
+    }
 }

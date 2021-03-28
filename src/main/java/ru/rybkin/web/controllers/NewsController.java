@@ -23,7 +23,7 @@ public class NewsController {
     }
 
     @GetMapping("/byCategory")
-    public ResponseEntity<List<NewsDTO>> getAllNewsOneCategory(@RequestParam String id_category) {
+    public ResponseEntity<List<NewsDTO>> getAllNewsOneCategory(@RequestParam Long id_category) {
         return service.getAllNewsOneCategory(id_category);
     }
 
