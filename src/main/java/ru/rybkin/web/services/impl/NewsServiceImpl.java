@@ -27,7 +27,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public ResponseEntity<List<NewsDTO>> getAllNews() {
-        List<News> newsList = newsRepository.findAll(); //фильтр новостей по категориям сделать
+        List<News> newsList = newsRepository.findAll();
 
         if (newsList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -69,7 +69,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public ResponseEntity<String> uploadNews(NewsDTO newsDTO) {
+    public ResponseEntity<String> createNews(NewsDTO newsDTO) {
         NewsCategoryDTO newsCategoryDTO = newsDTO.getCategory();
         News news = newsDTO.toNews();
 
@@ -118,6 +118,9 @@ public class NewsServiceImpl implements NewsService {
 
         if (newsDTO.getName() != null) {
             news.setName(newsDTO.getName());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Попытка добавить новость с пустым названием!");
         }
 
         if (newsDTO.getShortDescription() != null) {

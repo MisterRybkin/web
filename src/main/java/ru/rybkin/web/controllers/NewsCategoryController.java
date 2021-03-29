@@ -26,9 +26,9 @@ public class NewsCategoryController {
         return service.getNewsCategory(id);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadNewsCategory(@RequestBody NewsCategoryDTO newsCategoryDTO) {
-        return service.uploadNewsCategory(newsCategoryDTO);
+    @PostMapping("/create")
+    public ResponseEntity<String> createNewsCategory(@RequestBody NewsCategoryDTO newsCategoryDTO) {
+        return service.createNewsCategory(newsCategoryDTO);
     }
 
     @PutMapping("/update/{id}")

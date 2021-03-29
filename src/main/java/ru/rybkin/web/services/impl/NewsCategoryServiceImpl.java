@@ -47,7 +47,7 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
     }
 
     @Override
-    public ResponseEntity<String> uploadNewsCategory(NewsCategoryDTO newsCategoryDTO) {
+    public ResponseEntity<String> createNewsCategory(NewsCategoryDTO newsCategoryDTO) {
         if (repository.existsByNameAndColor(newsCategoryDTO.getName(), newsCategoryDTO.getColor())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Попытка добавить уже существующую категорию!");

@@ -32,9 +32,9 @@ public class NewsController {
         return service.getNews(id);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadNews(@RequestBody NewsDTO news) {
-        return service.uploadNews(news);
+    @PostMapping("/create")
+    public ResponseEntity<String> createNews(@RequestBody NewsDTO news) {
+        return service.createNews(news);
     }
 
     @PutMapping("/update/{id}")
